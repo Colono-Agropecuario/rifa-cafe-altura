@@ -33,18 +33,22 @@ const storageKey = "ruleta-premios-config";
 const publicAppUrl = "https://colono-agropecuario.github.io/rifa-cafe-altura/";
 const spinDuration = 10000;
 const sampleParticipants = [
-  "Andrea",
-  "Carlos",
-  "Mariana",
-  "Jose",
-  "Valeria",
-  "Luis",
-  "Gabriela",
-  "Sofia",
-  "Daniel",
-  "Natalia",
-  "Fernando",
-  "Paula",
+  "ARIAS SALAS GUILLERMO",
+  "SERGIO FERNANDEA RAMIREZ",
+  "ROJAS JIMENEZ ROGELIO",
+  "SAEZ AGRICOLA SOCIEDAD ANONIMA",
+  "FELIX ANGEL MATAMOROS ARAYA",
+  "TINOCO RUBIO PEDRO",
+  "VEGA OVARES GODOFREDO MARTIN",
+  "VEGA OVARES LIDIETH DE LA TRINIDAD",
+  "JIMENEZ QUIROS EVELIO",
+  "MARIO ALBERTO ARIAS SALAS",
+  "VENTURA RODRIGUEZ VASQUEZ",
+  "MAGDALENA ROJAS CASTRO",
+  "DIEGO CASTRO ULATE",
+  "Murillo Espinoza Gilgerth",
+  "VEGA OVARES IRMA MARIA",
+  "MARCONY MARIN",
 ];
 
 const defaultPrizes = [
