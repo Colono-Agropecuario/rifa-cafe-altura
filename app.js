@@ -478,7 +478,58 @@ function getConfigPayload() {
   };
 }
 
+function getDefaultPrizeImageIndex(image) {
+  return defaultPrizes.findIndex((prize) => prize.image === image);
+}
+
+async function getCompactImageReference(image) {
+  const defaultImageIndex = getDefaultPrizeImageIndex(image);
+  if (defaultImageIndex >= 0) return defaultImageIndex;
+
+  if (image.startsWith("data:image/") && !image.startsWith("data:image/svg") && !image.startsWith("data:image/gif")) {
+    try {
+      return await resizeImageDataUrl(image);
+    } catch {
+      return image;
+    }
+  }
+
+  return image;
+}
+
+async function getSharePayload() {
+  const activeIndex = Math.max(
+    0,
+    prizes.findIndex((prize) => prize.id === activePrizeSelect.value),
+  );
+
+  return {
+    v: 2,
+    p: participantsInput.value,
+    a: activeIndex,
+    r: await Promise.all(
+      prizes.map(async (prize) => [prize.name, await getCompactImageReference(prize.image)]),
+    ),
+  };
+}
+
 function applyConfigPayload(payload) {
+  if (payload.v === 2) {
+    participantsInput.value = payload.p || sampleParticipants.join("\n");
+    prizes = Array.isArray(payload.r) && payload.r.length
+      ? payload.r.map(([name, imageReference], index) => {
+          const defaultPrize = Number.isInteger(imageReference) ? defaultPrizes[imageReference] : null;
+          return {
+            id: `share-${index}`,
+            name: name || `Premio ${index + 1}`,
+            image: defaultPrize ? defaultPrize.image : imageReference,
+          };
+        })
+      : [...defaultPrizes];
+    pendingActivePrizeId = prizes[payload.a]?.id || prizes[0]?.id || null;
+    return;
+  }
+
   participantsInput.value = payload.participants || sampleParticipants.join("\n");
   prizes = Array.isArray(payload.prizes) && payload.prizes.length ? payload.prizes : [...defaultPrizes];
   pendingActivePrizeId = payload.activePrizeId || null;
@@ -534,7 +585,7 @@ async function decodeShareConfig(value) {
 function getSharedConfigValue() {
   const hash = window.location.hash.startsWith("#") ? window.location.hash.slice(1) : "";
   const params = new URLSearchParams(hash);
-  return params.get("config");
+  return params.get("c") || params.get("config");
 }
 
 async function loadSharedConfig() {
@@ -551,9 +602,9 @@ async function loadSharedConfig() {
 }
 
 async function createShareLink() {
-  const encoded = await encodeShareConfig(getConfigPayload());
+  const encoded = await encodeShareConfig(await getSharePayload());
   const url = new URL(window.location.href);
-  url.hash = new URLSearchParams({ config: encoded }).toString();
+  url.hash = `c=${encoded}`;
   return url.toString();
 }
 
@@ -569,9 +620,9 @@ async function shareCurrentConfig() {
 
     try {
       await navigator.clipboard.writeText(link);
-      shareStatus.textContent = "Link copiado. Puedes enviarlo para abrir esta misma rifa con la configuracion actual.";
+      shareStatus.textContent = "Link corto copiado. Puedes enviarlo para abrir esta rifa con la configuracion actual.";
     } catch {
-      shareStatus.textContent = "Link listo. Seleccionalo para copiarlo.";
+      shareStatus.textContent = "Link corto listo. Seleccionalo para copiarlo.";
     }
 
     shareLink.focus();
@@ -594,7 +645,7 @@ function fileToDataUrl(file) {
   });
 }
 
-function resizeImageDataUrl(dataUrl, maxSize = 900, quality = 0.84) {
+function resizeImageDataUrl(dataUrl, maxSize = 520, quality = 0.68) {
   return new Promise((resolve, reject) => {
     const image = new Image();
     image.addEventListener("load", () => {
