@@ -32,6 +32,20 @@ const colors = ["#0f766e", "#22c55e", "#84cc16", "#16a34a", "#14b8a6", "#65a30d"
 const storageKey = "ruleta-premios-config";
 const publicAppUrl = "https://colono-agropecuario.github.io/rifa-cafe-altura/";
 const spinDuration = 10000;
+const previousSampleParticipants = [
+  "Andrea",
+  "Carlos",
+  "Mariana",
+  "Jose",
+  "Valeria",
+  "Luis",
+  "Gabriela",
+  "Sofia",
+  "Daniel",
+  "Natalia",
+  "Fernando",
+  "Paula",
+];
 const sampleParticipants = [
   "ARIAS SALAS GUILLERMO",
   "SERGIO FERNANDEA RAMIREZ",
@@ -697,6 +711,9 @@ function loadSavedConfig() {
   try {
     const parsed = JSON.parse(saved);
     applyConfigPayload(parsed);
+    if (participantsInput.value === previousSampleParticipants.join("\n")) {
+      participantsInput.value = sampleParticipants.join("\n");
+    }
   } catch {
     participantsInput.value = sampleParticipants.join("\n");
     prizes = [...defaultPrizes];
