@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ruleta de Premios</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#inicio" aria-label="Ruleta Premios">
+        <span class="brand-mark">RP</span>
+        <span>Ruleta<span>Premios</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Principal">
+        <a href="#configuracion">Configurar</a>
+        <a href="#premios">Premios</a>
+        <a href="#juego">Jugar</a>
+      </nav>
+      <a class="account-link" href="#configuracion">Crear sorteo</a>
+    </header>
+
+    <main id="inicio">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Colono Agropecuario</p>
+          <h1 id="hero-title">RIFA CAFÉ DE ALTURA</h1>
+        </div>
+        <div class="hero-prize" aria-label="Premio destacado">
+          <img
+            id="heroPrizeImage"
+            src=""
+            alt="Premio seleccionado"
+          />
+          <div>
+            <span>Premio en disputa</span>
+            <strong id="heroPrizeName">Smart TV 55"</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace" id="configuracion">
+        <aside class="settings-panel" aria-label="Configuracion del sorteo">
+          <div class="panel-section">
+            <div class="section-heading">
+              <span class="icon" aria-hidden="true">OP</span>
+              <h2>Participantes</h2>
+              <span id="participantCount" class="counter">12</span>
+            </div>
+            <label for="participantInput">Un nombre por linea</label>
+            <textarea id="participantInput" spellcheck="false"></textarea>
+            <div class="button-row">
+              <button class="secondary" type="button" id="sortParticipants">Ordenar</button>
+              <button class="secondary" type="button" id="shuffleParticipants">Mezclar</button>
+              <button class="secondary" type="button" id="clearParticipants">Limpiar</button>
+            </div>
+          </div>
+
+          <div class="panel-section" id="premios">
+            <div class="section-heading">
+              <span class="icon gift-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img">
+                  <path d="M20 12v8H4v-8" />
+                  <path d="M2 7h20v5H2z" />
+                  <path d="M12 7v13" />
+                  <path d="M12 7H7.5a2.5 2.5 0 1 1 2-4c1.2 1.3 2.5 4 2.5 4z" />
+                  <path d="M12 7h4.5a2.5 2.5 0 1 0-2-4c-1.2 1.3-2.5 4-2.5 4z" />
+                </svg>
+              </span>
+              <h2>Premios</h2>
+              <span id="prizeCount" class="counter">3</span>
+            </div>
+            <label for="prizeName">Nombre del premio</label>
+            <input id="prizeName" type="text" placeholder="Ej. Audifonos premium" />
+            <label for="prizeImage">Foto del premio</label>
+            <input id="prizeImage" type="file" accept="image/*" />
+            <button class="secondary wide" type="button" id="addPrize">Agregar premio</button>
+            <div id="prizeList" class="prize-list" aria-label="Premios configurados"></div>
+          </div>
+        </aside>
+
+        <section class="game-stage" id="juego" aria-labelledby="game-title">
+          <div class="stage-toolbar">
+            <div>
+              <p class="eyebrow">Modo sorteo</p>
+              <h2 id="game-title">Gira la ruleta</h2>
+            </div>
+            <label class="prize-select">
+              Premio en disputa
+              <select id="activePrize"></select>
+            </label>
+          </div>
+
+          <div class="wheel-area">
+            <div class="wheel-wrap">
+              <canvas id="wheelCanvas" width="720" height="720" aria-label="Ruleta de participantes"></canvas>
+              <div class="wheel-center">RP</div>
+              <div class="pointer" aria-hidden="true"></div>
+            </div>
+            <div class="current-prize">
+              <img id="activePrizeImage" src="" alt="Foto del premio en disputa" />
+              <div>
+                <span>Ahora se juega</span>
+                <strong id="activePrizeName">Smart TV 55"</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="primary" type="button" id="spinButton">Comenzar</button>
+            <button class="ghost" type="button" id="resetWinner">Reiniciar resultado</button>
+            <button class="primary" type="button" id="shareButton">Compartir</button>
+          </div>
+          <div class="share-output" id="shareOutput" hidden>
+            <label for="shareLink">Link para compartir</label>
+            <input id="shareLink" type="text" readonly />
+            <p id="shareStatus" role="status"></p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <dialog id="winnerDialog" class="winner-dialog" aria-labelledby="winnerTitle">
+      <button class="close-dialog" type="button" id="closeWinner" aria-label="Cerrar">x</button>
+      <p class="eyebrow">Ganador</p>
+      <h2 id="winnerTitle">Nombre ganador</h2>
+      <img id="winnerPrizeImage" src="" alt="Foto del premio ganado" />
+      <p>
+        Se gano <strong id="winnerPrizeName">Premio</strong>
+      </p>
+      <button class="primary" type="button" id="playAgain">Girar otra vez</button>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
