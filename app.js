@@ -30,6 +30,7 @@ const playAgainButton = document.querySelector("#playAgain");
 const ctx = wheelCanvas.getContext("2d");
 const colors = ["#0f766e", "#22c55e", "#84cc16", "#16a34a", "#14b8a6", "#65a30d"];
 const storageKey = "ruleta-premios-config";
+const publicAppUrl = "https://colono-agropecuario.github.io/rifa-cafe-altura/";
 const spinDuration = 10000;
 const sampleParticipants = [
   "Andrea",
@@ -603,7 +604,7 @@ async function loadSharedConfig() {
 
 async function createShareLink() {
   const encoded = await encodeShareConfig(await getSharePayload());
-  const url = new URL(window.location.href);
+  const url = new URL(publicAppUrl);
   url.hash = `c=${encoded}`;
   return url.toString();
 }
